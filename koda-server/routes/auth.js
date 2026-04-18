@@ -8,6 +8,21 @@ const crypto = require('crypto');
 
 const router = express.Router();
 
+const authMiddleware = (req, res, next) => {
+  const token = req.header("x-auth-token");
+  if (!token) {
+    return res.status(401).json({ msg: "No token, authorization denied" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    return res.status(401).json({ msg: "Token is not valid" });
+  }
+};
+
 // Register a new user
 router.post("/register", async (req, res) => {
   try {
@@ -142,6 +157,55 @@ router.post('/reset-password/:token', async (req, res) => {
 
   } catch (err) {
     res.status(500).json({ msg: "Error resetting password" });
+  }
+});
+
+router.get('/me', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password -resetPasswordToken -resetPasswordExpires');
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+router.put('/me', authMiddleware, async (req, res) => {
+  try {
+    const { username, email } = req.body;
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    if (email && email !== user.email) {
+      const emailTaken = await User.findOne({ email });
+      if (emailTaken) {
+        return res.status(400).json({ msg: 'Email is already in use.' });
+      }
+      user.email = email;
+    }
+
+    if (username && username !== user.username) {
+      const usernameTaken = await User.findOne({ username });
+      if (usernameTaken) {
+        return res.status(400).json({ msg: 'Username is already in use.' });
+      }
+      user.username = username;
+    }
+
+    await user.save();
+    res.json({
+      id: user._id,
+      username: user.username,
+      email: user.email,
+    });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
   }
 });
 

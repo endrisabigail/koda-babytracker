@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import "./setUp.css";
+import { getCurrentUserId, selectedChildStorageKey } from "../utils/authStorage";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -35,6 +36,9 @@ const Login = () => {
       }
 
       localStorage.setItem("token", data.token);
+      if (data.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+      }
 
       const childRes = await fetch(`${API_URL}/api/children`, {
         headers: {
@@ -43,11 +47,13 @@ const Login = () => {
       });
 
       const children = await childRes.json();
+      const userId = data.user?.id || getCurrentUserId();
+      const childKey = selectedChildStorageKey(userId);
 
-      if (childRes.ok && Array.isArray(children) && children.length > 0) {
-        localStorage.setItem("selectedChild", JSON.stringify(children[0]));
-      } else {
-        localStorage.removeItem("selectedChild");
+      if (childKey && childRes.ok && Array.isArray(children) && children.length > 0) {
+        localStorage.setItem(childKey, JSON.stringify(children[0]));
+      } else if (childKey) {
+        localStorage.removeItem(childKey);
       }
 
       navigate("/parentDashboard");

@@ -19,6 +19,22 @@ const ChildSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    weight: {
+      type: String,
+      default: "",
+    },
+    allergies: {
+      type: String,
+      default: "",
+    },
+    other: {
+      type: String,
+      default: "",
+    },
+    moodExplanation: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );

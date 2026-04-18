@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ChevronDown, X, Save } from 'lucide-react';
 import '../App.css';
+import { getSelectedChildForUser } from '../utils/authStorage';
 
 const Activities = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const Activities = () => {
 
     try {
       const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-      const childName = JSON.parse(localStorage.getItem("selectedChild"))?.name || "Gracie";
+      const childName = getSelectedChildForUser()?.name || "Gracie";
       console.log("SELECTED CHILD:", childName);
 
       if (type === 'sleep') {
