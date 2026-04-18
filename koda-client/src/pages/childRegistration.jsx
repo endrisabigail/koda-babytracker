@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import "./setUp.css";
+import { setSelectedChildForUser } from "../utils/authStorage";
 
 const ChildRegistration = () => {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const ChildRegistration = () => {
         return;
       }
 
-      localStorage.setItem("selectedChild", JSON.stringify(data));
+      setSelectedChildForUser(data);
       navigate("/parentDashboard");
     } catch (err) {
       console.error("Could not create child profile:", err);

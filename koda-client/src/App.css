@@ -253,3 +253,50 @@ html, body {
   width: 100%;
   padding-right: 6px;
 }
+
+.settings-menu-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.settings-menu-trigger {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.settings-dropdown {
+  position: absolute;
+  right: 0;
+  bottom: 52px;
+  min-width: 180px;
+  padding: 8px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(12px);
+  z-index: 1200;
+}
+
+.settings-dropdown-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-family: 'Londrina Solid', cursive;
+  font-size: 20px;
+  text-align: left;
+  color: #000;
+  cursor: pointer;
+}
+
+.settings-dropdown-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+}

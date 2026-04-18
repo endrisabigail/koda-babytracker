@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
@@ -7,6 +7,7 @@ import {
   ChevronDown
 } from 'lucide-react';
 import '../App.css';
+import { getSelectedChildForUser } from '../utils/authStorage';
 
 const ParentDashboard = () => {
   const navigate = useNavigate();
@@ -14,12 +15,14 @@ const ParentDashboard = () => {
   const [caregivers, setCaregivers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedChild, setSelectedChild] = useState(null);
+  const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
+  const settingsMenuRef = useRef(null);
 
   // 1. Fetch data from Maria's Backend API
   useEffect(() => {
-    const savedChild = localStorage.getItem("selectedChild");
+    const savedChild = getSelectedChildForUser();
     if (savedChild) {
-      setSelectedChild(JSON.parse(savedChild));
+      setSelectedChild(savedChild);
     }
 
     const fetchData = async () => {
@@ -28,7 +31,7 @@ const ParentDashboard = () => {
 
         // Fetching activities for now.
         // Caregiver request can be added back once that route is available.
-        const childName = JSON.parse(localStorage.getItem("selectedChild"))?.name || "Gracie";
+        const childName = getSelectedChildForUser()?.name || "Gracie";
         const actRes = await axios.get(`${apiUrl}/api/activities?childName=${encodeURIComponent(childName)}`);
         console.log("ACTIVITY RESPONSE:", actRes.data);
         // const careRes = await axios.get(`${apiUrl}/api/auth/caregivers`);
@@ -80,6 +83,17 @@ const ParentDashboard = () => {
     };
 
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (settingsMenuRef.current && !settingsMenuRef.current.contains(event.target)) {
+        setIsSettingsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const backgroundStyle = {
@@ -171,7 +185,32 @@ const ParentDashboard = () => {
 
         <BarChart2 size={28} strokeWidth={1.5} className="nav-icon" onClick={() => navigate('/stats')} />
         <MessageCircle size={28} strokeWidth={1.5} className="nav-icon" onClick={() => navigate('/chat')} />
-        <Settings size={28} strokeWidth={.5} className="nav-icon" onClick={() => navigate('/settings')} />
+        <div className="settings-menu-wrapper" ref={settingsMenuRef}>
+          <button
+            type="button"
+            className="settings-menu-trigger"
+            onClick={() => setIsSettingsMenuOpen((current) => !current)}
+            aria-haspopup="menu"
+            aria-expanded={isSettingsMenuOpen}
+          >
+            <Settings size={28} strokeWidth={.5} className="nav-icon" />
+          </button>
+
+          {isSettingsMenuOpen && (
+            <div className="settings-dropdown" role="menu">
+              <button
+                type="button"
+                className="settings-dropdown-item"
+                onClick={() => {
+                  setIsSettingsMenuOpen(false);
+                  navigate('/settings');
+                }}
+              >
+                Account Settings
+              </button>
+            </div>
+          )}
+        </div>
       </nav>
     </div>
   );
