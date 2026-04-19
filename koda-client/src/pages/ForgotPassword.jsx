@@ -16,9 +16,7 @@ const ForgotPassword = () => {
   
     try {
       // Ensure this matches your server's port
-      const API_URL = process.env.NODE_ENV === "production" 
-        ? "https://koda-api.onrender.com" 
-        : "http://localhost:5000";
+      const API_URL = "http://localhost:5000"; 
   
       const res = await fetch(`${API_URL}/api/auth/forgot-password`, {
         method: "POST",
