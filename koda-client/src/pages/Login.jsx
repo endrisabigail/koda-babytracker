@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import "./setUp.css";
 import { getCurrentUserId, selectedChildStorageKey } from "../utils/authStorage";
+import { API_URL } from "../config";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -21,7 +22,6 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
       const res = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

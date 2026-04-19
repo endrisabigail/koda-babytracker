@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import "./setUp.css"; // Reuse your existing styling
+import { API_URL } from "../config";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -14,10 +15,7 @@ const ForgotPassword = () => {
     setError("");
     setMessage("");
   
-    try {
-      // Ensure this matches your server's port
-      const API_URL = "http://localhost:5000"; 
-  
+    try {  
       const res = await fetch(`${API_URL}/api/auth/forgot-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

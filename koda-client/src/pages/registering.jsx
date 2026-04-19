@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import "./setUp.css";
+import { API_URL } from "../config";
 
 const Registering = () => {
   const navigate = useNavigate();
@@ -56,8 +57,6 @@ const Registering = () => {
     setLoading(true);
 
     try {
-      const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
-
       const res = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

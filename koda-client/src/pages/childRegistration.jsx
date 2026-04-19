@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import "./setUp.css";
 import { setSelectedChildForUser } from "../utils/authStorage";
+import { API_URL } from "../config";
 
 const ChildRegistration = () => {
   const navigate = useNavigate();
@@ -16,7 +17,6 @@ const ChildRegistration = () => {
     if (!name || !dob) return;
 
     try {
-      const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
       const token = localStorage.getItem("token");
 
       const res = await fetch(`${API_URL}/api/children`, {

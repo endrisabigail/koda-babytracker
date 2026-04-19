@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./setUp.css";
+import { API_URL } from "../config";
 
 const ResetPassword = () => {
   const { token } = useParams(); // Grabs the secret token from the URL
@@ -13,7 +14,6 @@ const ResetPassword = () => {
     if (password !== confirm) return alert("Passwords do not match");
 
     try {
-      const API_URL = "http://localhost:5000";
       const res = await fetch(`${API_URL}/api/auth/reset-password/${token}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
