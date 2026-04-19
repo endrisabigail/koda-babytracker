@@ -16,7 +16,9 @@ const ChildRegistration = () => {
     if (!name || !dob) return;
 
     try {
-      const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+      const API_URL = process.env.NODE_ENV === "production" 
+        ? "https://koda-api.onrender.com" 
+        : "http://localhost:5000";
       const token = localStorage.getItem("token");
 
       const res = await fetch(`${API_URL}/api/children`, {

@@ -22,7 +22,9 @@ const Activities = () => {
     e.preventDefault();
 
     try {
-      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+      const API_URL = process.env.NODE_ENV === "production" 
+        ? "https://koda-api.onrender.com" 
+        : "http://localhost:5000";
       const childName = getSelectedChildForUser()?.name || "Gracie";
       console.log("SELECTED CHILD:", childName);
 
@@ -35,7 +37,7 @@ const Activities = () => {
 
         const duration = Math.round((sleepEnd - sleepStart) / (1000 * 60));
 
-        await axios.post(`${apiUrl}/api/sleep`, {
+        await axios.post(`${API_URL}/api/sleep`, {
           childName,
           startTime: sleepStart,
           endTime: sleepEnd,
@@ -44,7 +46,7 @@ const Activities = () => {
           timestamp: new Date(),
         });
       } else if (type === 'feeding') {
-        await axios.post(`${apiUrl}/api/feeding`, {
+        await axios.post(`${API_URL}/api/feeding`, {
           childName,
           type: feedingType,
           amount: feedingAmount ? Number(feedingAmount) : undefined,
@@ -53,7 +55,7 @@ const Activities = () => {
         });
 
       } else if (type === 'diaper') {
-        await axios.post(`${apiUrl}/api/diaper`, {
+        await axios.post(`${API_URL}/api/diaper`, {
           childName,
           type: diaperType,
           timestamp: new Date(),

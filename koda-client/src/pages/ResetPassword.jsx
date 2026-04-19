@@ -13,7 +13,9 @@ const ResetPassword = () => {
     if (password !== confirm) return alert("Passwords do not match");
 
     try {
-      const API_URL = "http://localhost:5000";
+      const API_URL = process.env.NODE_ENV === "production" 
+        ? "https://koda-api.onrender.com" 
+        : "http://localhost:5000";
       const res = await fetch(`${API_URL}/api/auth/reset-password/${token}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
