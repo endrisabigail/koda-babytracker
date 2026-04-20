@@ -298,9 +298,6 @@ const Activities = () => {
         )}
 
       </form>
-      {type !== 'sleep' && type !== 'feeding' && type !== 'diaper' && (
-        <img src="/bear-character.png" alt="Koda Bear" className="bear-character" />
-      )}
     </div>
   );
 };
