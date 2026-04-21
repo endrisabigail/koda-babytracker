@@ -103,7 +103,7 @@ const Layout = ({ children }) => {
                   navigate("/babysettings");
                 }}
               >
-                Baby settings
+                {selectedChild?.name || "Gracie"}'s settings
               </button>
               <button
                 type="button"

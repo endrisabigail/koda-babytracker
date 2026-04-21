@@ -39,7 +39,6 @@ const backgroundStyle = {
 useGLTF.preload("/bear.glb");
 useGLTF.preload("/feeding.glb");
 useGLTF.preload("/sleep.glb");
-useGLTF.preload("/diaper.glb");
 
 const ParentDashboard = () => {
   const navigate = useNavigate();
@@ -101,7 +100,6 @@ const ParentDashboard = () => {
     const latest = activities[0];
     if (latest.type === "feeding") return "/feeding.glb";
     if (latest.type === "sleep") return "/sleep.glb";
-    if (latest.type === "diaper") return "/diaper.glb";
     return "/bear.glb";
   };
 
